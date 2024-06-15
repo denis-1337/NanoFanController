@@ -5,7 +5,7 @@
  - 3 channel processing
  - 3 Temperature sensor inputs for NTC resistor
  - 2 PWM fan tacho inputs to count rpm
- - 2 PWM outputs for controlling PWM fan speed
+ - 2 PWM fan outputs to control speed
  - Menu system to edit all parameters
  - 4 Buttons to edit parameters and switch views
  - Support for DOGS104 4x10 display [link](https://www.lcd-module.de/fileadmin/pdf/doma/dogs104.pdf)
@@ -16,5 +16,5 @@
 
 
 View newest schematic at: https://crcit.net/c/6659b8724b3e4b67b652c3124bdcdf9e
-screenshot "Schematics.png":
+Screenshot "Schematics.png":
 ![schematics](https://github.com/denis-1337/NanoFanController/blob/main/Schematics.png)
