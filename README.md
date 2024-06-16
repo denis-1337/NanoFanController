@@ -30,15 +30,14 @@ Hardware:
 
 Used library for SSD1803A controller of the display: https://github.com/sstaub/SSD1803A_I2C
 
-View newest schematic at: https://crcit.net/c/6659b8724b3e4b67b652c3124bdcdf9e
-Screenshot "Schematics.png":
-![schematics](https://github.com/denis-1337/NanoFanController/blob/main/Schematics.png)
+Schematics:
+- View newest schematic at: https://crcit.net/c/6659b8724b3e4b67b652c3124bdcdf9e
 
-Menu structure:
-![schematics](https://github.com/denis-1337/NanoFanController/blob/main/menu_structure.png)
+![schematics](https://github.com/denis-1337/NanoFanController/blob/main/Schematics.png)
 
 
 Menu logic:
+![Menu structure](https://github.com/denis-1337/NanoFanController/blob/main/menu_structure.PNG)
 
 - If the device is in display mode (just after power on), the buttons left and right switch through displaying modes (channel1, channel2, channel3, autoswitching)
 - If button down is pressed, the device goes into setup menu
@@ -77,4 +76,10 @@ Menu logic:
 - maxT.ALRT (on/off): Activates alert on maximum temperature reached
 - minT.ALRT (on/off): Activates alert on underflowing minimum temperature (0°C)
 - RPM-ALERT: (on/off): Activates alert on 0 RPM on tacho input
-  
+
+Temperature to dutycycle curve explaination:
+![example_curve](https://github.com/denis-1337/NanoFanController/blob/main/dutycycle_examplecurve.PNG)
+
+Alerting:
+- Alert beeping and red flashing of background LEDs will keep forever until any button is pressed to stop alerting.
+- If alerting is stopped by button, new alerts are muted until device has been reset.
