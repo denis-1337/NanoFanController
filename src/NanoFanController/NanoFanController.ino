@@ -14,9 +14,9 @@ const uint8_t tachoCh1 = 3; //channel 1 tacho input pin
 const uint8_t tachoCh2 = 2; //channel 2 tacho input pin
 const uint8_t tempPinCh1 = A0; //channel 1 ntc temp resistor input pin
 const uint8_t tempPinCh2 = A1; //channel 2 ntc temp resistor input pin
-const uint8_t tempPinCh3 = A3; //channel 2 ntc temp resistor input pin
-const uint8_t pwmPinCh1 = 9; //channel 1 pwm output pin
-const uint8_t pwmPinCh2 = 10; //channel 2 pwm output pin
+const uint8_t tempPinCh3 = A2; //channel 3 ntc temp resistor input pin
+const uint8_t pwmPinCh1 = 10; //channel 1 pwm output pin
+const uint8_t pwmPinCh2 = 9; //channel 2 pwm output pin
 
 //global timing variables
 unsigned long processingTimer, channelSwitchTimer, buttonimpulse, alertTimer;
