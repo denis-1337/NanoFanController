@@ -23,7 +23,7 @@ Features:
    
 
 Hardware:
-- AZ Delivery Arduino Nano
+- AZ Delivery Arduino Nano V3
 - EA DOGS104W-A (display)
 - EA LED36X28-GR (LED backlight green+red)
 - Rest of electronic components - see schematics
@@ -77,9 +77,19 @@ Menu logic:
 - minT.ALRT (on/off): Activates alert on underflowing minimum temperature (0°C)
 - RPM-ALERT: (on/off): Activates alert on 0 RPM on tacho input
 
-Temperature to dutycycle curve explaination:
+Temperature to dutycycle curve example:
+
 ![example_curve](https://github.com/denis-1337/NanoFanController/blob/main/dutycycle_examplecurve.PNG)
 
+The green dotted line shows the resulting dutycycle on different temperature values by given points 1-3 and min/max dutycycle.
+
 Alerting:
-- Alert beeping and red flashing of background LEDs will keep forever until any button is pressed to stop alerting.
-- If alerting is stopped by button, new alerts are muted until device has been reset.
+- Alert beeping and red flashing of background LEDs will keep forever until any button is pressed to stop alerting
+- If alerting is stopped by button, new alerts are muted until device has been reset
+
+First startup:
+
+The EEPROM will be read at startup and one special value will be compared with a hardcoded magic value.
+If the value of the eeprom doesnt match, the eeprom will be erased and default values will be loaded for all settings.
+
+
