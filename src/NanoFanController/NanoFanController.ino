@@ -10,6 +10,12 @@ const uint8_t resetPin = 4;    //LCD reset pin Digital4
 const uint8_t LEDg = 12;  //green background LED output pin
 const uint8_t LEDr = 11;  //red background LED output pin
 const uint8_t BEEP = 13;  //piezo active beeper output pin
+const uint8_t tachoCh1 = 3; //channel 1 tacho input pin
+const uint8_t tachoCh2 = 2; //channel 2 tacho input pin
+const uint8_t tempPinCh1 = A0; //channel 1 ntc temp resistor input pin
+const uint8_t tempPinCh2 = A1; //channel 2 ntc temp resistor input pin
+const uint8_t pwmPinCh1 = 9; //channel 1 pwm output pin
+const uint8_t pwmPinCh2 = 10; //channel 2 pwm output pin
 
 //global timing variables
 unsigned long processingTimer, channelSwitchTimer, buttonimpulse, alertTimer;
@@ -73,10 +79,12 @@ uint8_t CUSTOMenter[8] = {
 //set interrupts for tacho pins
 void tachoISRPin2() {
   tachocntPin2++;
+
 };
 
 void tachoISRPin3() {
   tachocntPin3++;
+ 
 };
 
 //software reset function// call with: resetFunc();
@@ -200,7 +208,7 @@ public:
     //https://forum.arduino.cc/t/ol-temperatur-messen-welcher-oltemperaturgeber-kfz/152055/12#msg1170722
     float temp = temperature_NTCB(this->temp_TEMPERATURENOMINAL, this->temp_THERMISTORNOMINAL, this->temp_BCOEFFICIENT, this->temp_SERIESRESISTOR, analogRead(temp_pin) / 1023.0);
     //if (temp < 0) temp = 0;   //prevent byte overflow later
-    return round(temp * 10);  //integer is faster to compute -> use one digit after comma max resolution
+    return round(temp * 10);  //integer is faster to compute
   }
 
   void initPWM() {
@@ -381,12 +389,14 @@ public:
     switch (this->tacho_pin) {
       case 2:
         ret = tachocntPin2 * 30;
+       
         tachocntPin2 = 0;
         return ret;
         break;
 
       case 3:
         ret = tachocntPin3 * 30;
+        
         tachocntPin3 = 0;
         return ret;
         break;
@@ -575,25 +585,19 @@ public:
 
   void init(byte pin, bool inverted) {
     //Configue Port PA0 Output
-    //mcp.pinMode(pin, INPUT);
+  
     this->pin = pin;
     this->inverted = inverted;
     lastReading = LOW;
     pinMode(pin, INPUT_PULLUP);
 
-    //turn on a 100K pullup internally
-    //mcp.pullUp(pin, HIGH);
-
-    //  pinMode(pin, INPUT);
     update();
   }
   void update() {
     byte newReading;
     if (inverted) {
-      // newReading = !mcp.digitalRead(pin);
       newReading = !digitalRead(pin);
     } else {
-      // newReading = mcp.digitalRead(pin);
       newReading = digitalRead(pin);
     }
 
@@ -677,7 +681,7 @@ void setup() {
 
 
 
-  //Serial.begin(9600); //only for debugging needed
+  Serial.begin(9600); //only for debugging needed
 
   //hardware bugfix for DOGS104 i2c interface after powerloss -> display sets i2c lines to low for some seconds - so we wait until we got "normal" pullup voltage
   //setting reset pin to low, i2c pins to high makes this propably obsolete but its ok to leave this here functional in case of non functional i2c levels
@@ -730,11 +734,10 @@ void setup() {
     delay(1000);
     resetFunc();
   }
-  //
 
   //init channels (read EEPROM) -> we start at byte 3
-  int addr = ch1.init(2, A0, 9, 2);
-  addr = ch2.init(addr, A1, 10, 3);
+  int addr = ch1.init(2, tempPinCh1, pwmPinCh1, tachoCh1);
+  addr = ch2.init(addr, tempPinCh2, pwmPinCh2, tachoCh2);
   eeprom_addrGeneral = ch3.init(addr, A3, 0, 0);
 
   //init general settings (read EEPROM)
@@ -747,7 +750,7 @@ void setup() {
     lcd.display(VIEW_BOTTOM);
   }
 
-  //prevent further erases
+  //prevent further erases and save magic value in EEPROM
   if (magicValue_EEPROM_SET != magicValue_EEPROM) {
     EEPROM.put(0, magicValue_EEPROM);
   }
@@ -765,9 +768,6 @@ void setup() {
     down.init(8, true);
   }
 
-
-
-
   digitalWrite(LEDg, HIGH);
 
   lcd.locate(1, 0);
@@ -781,9 +781,10 @@ void setup() {
   digitalWrite(LEDg, LOW);
   delay(300);
 
+  //i2c clock
   Wire.setClock(400000);  //400khz instead of standard 100khz i2c clock
 
-  //tacho
+  //tacho counter init
   tachocntPin2 = 0;
   tachocntPin3 = 0;
 };
@@ -816,12 +817,12 @@ void loop() {
   Channel *ch;
   byte tempbyte;
 
-  //https://www.norwegiancreations.com/2018/10/arduino-tutorial-avoiding-the-overflow-issue-when-using-millis-and-micros/
+
 
 
   //processing
   if (actms - processingTimer > 1000) {
-
+    //https://www.norwegiancreations.com/2018/10/arduino-tutorial-avoiding-the-overflow-issue-when-using-millis-and-micros/
     processingTimer = actms;
 
     if (ch1.process()) changed = true;
@@ -829,7 +830,7 @@ void loop() {
     if (ch3.process()) changed = true;
   }
 
-  //display switch threw channels
+  //display switch thru channels
   if ((generalSettings.statusMode == 0) && (actms - channelSwitchTimer > generalSettings.autoswitchtime)) {
     dv.ch++;
     if (dv.ch >= 4) dv.ch = 1;
