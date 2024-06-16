@@ -14,6 +14,7 @@ const uint8_t tachoCh1 = 3; //channel 1 tacho input pin
 const uint8_t tachoCh2 = 2; //channel 2 tacho input pin
 const uint8_t tempPinCh1 = A0; //channel 1 ntc temp resistor input pin
 const uint8_t tempPinCh2 = A1; //channel 2 ntc temp resistor input pin
+const uint8_t tempPinCh3 = A3; //channel 2 ntc temp resistor input pin
 const uint8_t pwmPinCh1 = 9; //channel 1 pwm output pin
 const uint8_t pwmPinCh2 = 10; //channel 2 pwm output pin
 
@@ -738,7 +739,7 @@ void setup() {
   //init channels (read EEPROM) -> we start at byte 3
   int addr = ch1.init(2, tempPinCh1, pwmPinCh1, tachoCh1);
   addr = ch2.init(addr, tempPinCh2, pwmPinCh2, tachoCh2);
-  eeprom_addrGeneral = ch3.init(addr, A3, 0, 0);
+  eeprom_addrGeneral = ch3.init(addr, tempPinCh3, 0, 0);
 
   //init general settings (read EEPROM)
   ReadGeneralEEPROM(eeprom_addrGeneral, generalSettings);
