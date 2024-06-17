@@ -92,4 +92,12 @@ First startup:
 The EEPROM will be read at startup and one special value will be compared with a hardcoded magic value.
 If the value of the eeprom doesnt match, the eeprom will be erased and default values will be loaded for all settings.
 
+Here are pictures of my prototype: 
 
+![pic1](https://github.com/denis-1337/NanoFanController/blob/main/pictures/DSC03342_DxO.jpg)
+![display board](https://github.com/denis-1337/NanoFanController/blob/main/pictures/DSC03343_DxO.jpg)
+![display board back](https://github.com/denis-1337/NanoFanController/blob/main/pictures/DSC03346_DxO.jpg)
+![main board](https://github.com/denis-1337/NanoFanController/blob/main/pictures/DSC03344_DxO.jpg)
+![main board back](https://github.com/denis-1337/NanoFanController/blob/main/pictures/DSC03347_DxO.jpg)
+![main board w/o arduino](https://github.com/denis-1337/NanoFanController/blob/main/pictures/DSC03348_DxO.jpg)
+![full view](https://github.com/denis-1337/NanoFanController/blob/main/pictures/DSC03345_DxO.jpg)
