@@ -501,10 +501,16 @@ public:
 
   //displays channel values
   bool display() {
-    lcd.locate(0, 9);
+    int offset = 0;
+    if (generalSettings.upsideDown) offset = -9;
+    int offset2 = 0;
+    if (generalSettings.upsideDown) offset2 = 2;
+
+    lcd.locate(0, 9+offset);
+
     lcd.print(chNr);
 
-    lcd.locate(0, 0);
+    lcd.locate(0, 0+offset2);
     lcd.write(this->chName, 8);  //print needs null terminated string -> we dont have, so we write() bytes directly with specified length
 
     if (!enabled) return false;
@@ -1260,6 +1266,14 @@ void loop() {
   if (changed) {
     char buf[5];
     lcd.cls();
+
+    // upside down mode fix for display -> it has buggy locate() positions on upside down mode! - not completely fixable cause u cannot position the cursor absolute :(
+    int offset = 0;
+    if (generalSettings.upsideDown) offset = -9;
+    int offset2 = 0;
+    if (generalSettings.upsideDown) offset2 = 1;
+
+
     switch (dv.displayMode) {
       case 0:  //status
 
@@ -1293,40 +1307,40 @@ void loop() {
         }  //statusMode
         break;
       case 1:  //setup
-        lcd.locate(0, 0);
+        lcd.locate(0, 0+offset2);
         lcd.print("SETUP");
 
         switch (dv.menu0) {
           case 0:
-            lcd.locate(0, 9);
+            lcd.locate(0, 9+offset);
             lcd.write(0);  //CUSTOMup
-            lcd.locate(1, 9);
+            lcd.locate(1, 9+offset);
             lcd.write(1);  //CUSTOMdown
-            lcd.locate(1, 0);
+            lcd.locate(1, 0+offset2);
             lcd.print("SAVE");
-            lcd.locate(2, 9);
+            lcd.locate(2, 9+offset);
             lcd.print(">");
-            lcd.locate(3, 9);
+            lcd.locate(3, 9+offset);
             lcd.print(" ");
             if (dv.level > 0) {
 
               switch (dv.menu1) {
                 case 0:  //save cmd
-                  lcd.locate(0, 9);
+                  lcd.locate(0, 9+offset);
                   lcd.write(0);  //CUSTOMup
-                  lcd.locate(1, 9);
+                  lcd.locate(1, 9+offset);
                   lcd.write(2);  //CUSTOMenter
-                  lcd.locate(2, 0);
+                  lcd.locate(2, 0+offset2);
                   lcd.print("ALL");
                   if (dv.edit) {
-                    lcd.locate(0, 9);
+                    lcd.locate(0, 9+offset);
                     lcd.write(0);  //CUSTOMup
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("!");
 
-                    lcd.locate(3, 0);
+                    lcd.locate(3, 0+offset2);
                     lcd.print("DO SAVE!");
                   }
                   break;
@@ -1335,73 +1349,73 @@ void loop() {
 
             break;
           case 1:
-            lcd.locate(0, 9);
+            lcd.locate(0, 9+offset);
             lcd.write(0);  //CUSTOMup
-            lcd.locate(1, 9);
+            lcd.locate(1, 9+offset);
             lcd.write(1);  //CUSTOMdown
-            lcd.locate(1, 0);
+            lcd.locate(1, 0+offset2);
             lcd.print("GENERAL");
-            lcd.locate(2, 9);
+            lcd.locate(2, 9+offset);
             lcd.print(">");
-            lcd.locate(3, 9);
+            lcd.locate(3, 9+offset);
             lcd.print("<");
             if (dv.level > 0) {
 
               switch (dv.menu1) {
 
                 case 0:  //AutoSwitchTime
-                  lcd.locate(0, 9);
+                  lcd.locate(0, 9+offset);
                   lcd.write(0);  //CUSTOMup
-                  lcd.locate(1, 9);
+                  lcd.locate(1, 9+offset);
                   lcd.write(2);  //CUSTOMenter
-                  lcd.locate(2, 0);
+                  lcd.locate(2, 0+offset2);
                   lcd.print("AutoSwT");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   lcd.print(generalSettings.autoswitchtime);
                   lcd.print(" ms");
 
-                  lcd.locate(2, 9);
+                  lcd.locate(2, 9+offset);
                   lcd.print(">");
-                  lcd.locate(3, 9);
+                  lcd.locate(3, 9+offset);
                   lcd.print(" ");
                   if (dv.edit) {
-                    lcd.locate(0, 9);
+                    lcd.locate(0, 9+offset);
                     lcd.write(0);  //CUSTOMup
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
 
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
 
                 case 1:  //upsideDown
-                  lcd.locate(0, 9);
+                  lcd.locate(0, 9+offset);
                   lcd.write(0);  //CUSTOMup
-                  lcd.locate(1, 9);
+                  lcd.locate(1, 9+offset);
                   lcd.write(2);  //CUSTOMenter
-                  lcd.locate(2, 0);
+                  lcd.locate(2, 0+offset2);
                   lcd.print("upsideDwn");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
 
                   if (generalSettings.upsideDown) lcd.print("ON");
                   else lcd.print("OFF");
-                  lcd.locate(2, 9);
+                  lcd.locate(2, 9+offset);
                   lcd.print(" ");
-                  lcd.locate(3, 9);
+                  lcd.locate(3, 9+offset);
                   lcd.print("<");
 
                   if (dv.edit) {
-                    lcd.locate(0, 9);
+                    lcd.locate(0, 9+offset);
                     lcd.write(0);  //CUSTOMup
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
 
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("1");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("0");
                   }
                   break;
@@ -1416,260 +1430,262 @@ void loop() {
               case 4: ch = &ch3; break;
             }
 
-            lcd.locate(0, 9);
+            lcd.locate(0, 9+offset);
             lcd.write(0);  //CUSTOMup
-            lcd.locate(1, 9);
+            lcd.locate(1, 9+offset);
             lcd.write(1);  //CUSTOMdown
 
-            lcd.locate(1, 0);
+            lcd.locate(1, 0+offset2);
             lcd.print("CH ");
-            lcd.locate(1, 3);
+            lcd.locate(1, 3+offset2);
             lcd.print(ch->chNr);
-            lcd.locate(2, 9);
+            lcd.locate(2, 9+offset);
             if (dv.menu0 < 4) {
               lcd.print(">");
             } else {
               lcd.print(" ");
             }
-            lcd.locate(3, 9);
+            lcd.locate(3, 9+offset);
             lcd.print("<");
             if (dv.level > 0) {
 
-              lcd.locate(1, 9);
+              lcd.locate(1, 9+offset);
               lcd.write(2);  //CUSTOMenter
-              lcd.locate(2, 9);
+              lcd.locate(2, 9+offset);
               if (dv.menu1 < 22) lcd.print(">");
               else lcd.print(" ");
-              lcd.locate(3, 9);
+              lcd.locate(3, 9+offset);
               if (dv.menu1 > 0) lcd.print("<");
               else lcd.print(" ");
 
-              lcd.locate(2, 0);
+              lcd.locate(2, 0+offset2);
               switch (dv.menu1) {
 
                 case 0:  //Enable
 
 
                   lcd.print("EnableCH");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   if (ch->enabled) lcd.print("ON");
                   else lcd.print("OFF");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("1");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("0");
                   }
                   break;
                 case 1:  //Enable PWM
 
                   lcd.print("EnablePWM");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   if (ch->enablePWM) lcd.print("ON");
                   else lcd.print("OFF");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("1");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("0");
                   }
                   break;
                 case 2:  //Enable Tacho RPM Counter
 
                   lcd.print("EnableRPM");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   if (ch->enableTacho) lcd.print("ON");
                   else lcd.print("OFF");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("1");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("0");
                   }
                   break;
                 case 3:  //temp_THERMISTORNOMINAL
 
                   lcd.print("THERNOM");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   lcd.print(ch->temp_THERMISTORNOMINAL);
                   lcd.print(" ");
                   lcd.print((char)CHARohm);
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 4:  //temp_TEMPERATURENOMINAL
 
                   lcd.print("TEMPNOM");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   lcd.print(ch->temp_TEMPERATURENOMINAL);
                   lcd.print(" ");
                   lcd.print((char)CHARgrad);
 
                   lcd.print("C");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 5:  //temp_SERIESRESISTOR
 
                   lcd.print("SERIES R");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   lcd.print(ch->temp_SERIESRESISTOR);
                   lcd.print(" ");
                   lcd.print((char)CHARohm);
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 6:  //temp_BCOEFFICIENT
 
                   lcd.print("COEFF B");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   lcd.print(ch->temp_BCOEFFICIENT);
 
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 7:  //channel name string edit
 
                   lcd.print("CH NAME");
-                  lcd.locate(3, 0);
-                  lcd.write(ch->chName, 8);
+                  
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
-                    lcd.locate(3, dv.stringedit);
+                    
 
                     //lcd.print("_");
                   }
+                  lcd.locate(3, 0+offset2);
+                  lcd.write(ch->chName, 8);
+                  lcd.locate(3, dv.stringedit+offset);
                   break;
                 case 8:  //enableAutoPWM
 
                   lcd.print("AutoPWM");
-                  lcd.locate(3, 6);
+                  lcd.locate(3, 6+offset2);
 
                   if (ch->enableAutoPWM) lcd.print("ON");
                   else lcd.print("OFF");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("1");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("0");
                   }
                   break;
                 case 9:  //manualDuty
 
                   lcd.print("man.PWM");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   lcd.print(ch->manualDuty);
 
                   lcd.print(" %");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 10:  //minDuty
 
                   lcd.print("minPWM");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   lcd.print(ch->minDuty);
 
                   lcd.print(" %");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 11:  //maxDuty
 
                   lcd.print("maxPWM");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   lcd.print(ch->maxDuty);
 
                   lcd.print(" %");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 12:  //p1Temp
 
                   lcd.print("p1Temp");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
 
                   lcd.print(dtostrf((float)ch->p1Temp / 10, 2, 1, buf));
                   lcd.print(" ");
                   lcd.print((char)CHARgrad);
                   lcd.print("C");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 13:  //p1Duty
 
                   lcd.print("p1PWM");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   lcd.print(ch->p1Duty);
 
                   lcd.print(" %");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
@@ -1677,34 +1693,34 @@ void loop() {
                 case 14:  //p2Temp
 
                   lcd.print("p2Temp");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
 
                   lcd.print(dtostrf((float)ch->p2Temp / 10, 2, 1, buf));
                   lcd.print(" ");
                   lcd.print((char)CHARgrad);
                   lcd.print("C");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 15:  //p2Duty
 
                   lcd.print("p2PWM");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   lcd.print(ch->p2Duty);
 
                   lcd.print(" %");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
@@ -1712,41 +1728,41 @@ void loop() {
                 case 16:  //p3Temp
 
                   lcd.print("p3Temp");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
 
                   lcd.print(dtostrf((float)ch->p3Temp / 10, 2, 1, buf));
                   lcd.print(" ");
                   lcd.print((char)CHARgrad);
                   lcd.print("C");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 17:  //p3Duty
 
                   lcd.print("p3PWM");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   lcd.print(ch->p3Duty);
 
                   lcd.print(" %");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 18:  //duty hysteresis %
 
                   lcd.print("PWM HYST.");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
                   if (ch->dutyHysteresis > 1) {
                     lcd.print(ch->dutyHysteresis);
                     lcd.print(" %");
@@ -1754,77 +1770,77 @@ void loop() {
                     lcd.print("OFF");
 
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 19:  //pmaxAlertTemp
 
                   lcd.print("maxT.ALRT");
-                  lcd.locate(3, 0);
+                  lcd.locate(3, 0+offset2);
 
                   lcd.print(dtostrf((float)ch->pmaxAlertTemp / 10, 2, 1, buf));
                   lcd.print(" ");
                   lcd.print((char)CHARgrad);
                   lcd.print("C");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("+");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("-");
                   }
                   break;
                 case 20:  //enableMaxTempAlert
 
                   lcd.print("maxT.ALRT");
-                  lcd.locate(3, 6);
+                  lcd.locate(3, 6+offset2);
 
                   if (ch->enableMaxTempAlert) lcd.print("ON");
                   else lcd.print("OFF");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("1");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("0");
                   }
                   break;
                 case 21:  //enableMinTempAlert
 
                   lcd.print("minT.ALRT");
-                  lcd.locate(3, 6);
+                  lcd.locate(3, 6+offset2);
 
                   if (ch->enableMinTempAlert) lcd.print("ON");
                   else lcd.print("OFF");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("1");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("0");
                   }
                   break;
                 case 22:  //enableMinTempAlert
 
                   lcd.print("RPM-ALERT");
-                  lcd.locate(3, 6);
+                  lcd.locate(3, 6+offset2);
 
                   if (ch->enableNoRPMAlert) lcd.print("ON");
                   else lcd.print("OFF");
                   if (dv.edit) {
-                    lcd.locate(1, 9);
+                    lcd.locate(1, 9+offset);
                     lcd.print(" ");
-                    lcd.locate(2, 9);
+                    lcd.locate(2, 9+offset);
                     lcd.print("1");
-                    lcd.locate(3, 9);
+                    lcd.locate(3, 9+offset);
                     lcd.print("0");
                   }
                   break;
